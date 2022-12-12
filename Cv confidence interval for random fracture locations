@@ -1,0 +1,34 @@
+#Cv hypothesis testing method:
+## randomly generated N numbers within the range of designed scanline length, that's one scanline for one well. 
+## 100 interrations (same as CorrCount default number of randomization) for each well,create a distribution of Cv used for the hypothesis testing. 
+## null hypothesis that an observed natural fracture sequence is randomly distributed
+
+#well 12-8 all, number of fracture N=549, Scanline length 3556ft, spacing values needs 2 digits, to 0.01ft
+## sample spacing values 
+n1=549
+l1=3556
+x1<-diff(sort(sample(1:(l1*100), n1, replace=(FALSE))/100))
+print(x1)
+## calculate Cv for one sample
+cv1 = sd(x1)/mean(x1)
+cv1
+## repeat the sampling for 100 times
+m=100
+for (j in 1:m){
+  
+  a1 = sample(1:(l1*100), n1, replace=(FALSE))/100
+  b1<-sort(a1)
+  c1<-diff(b1)
+  cv1[j] = sd(c1)/mean(c1)}
+#	view distribution of Cv for random fracture locations for well 12-8
+hist(cv1, main = paste("frequency of Cv, 12-8ah all fratures"))
+print(sort(cv1))
+# derive 95% confidence intervals to Cv values for random fracture locations
+s1=sd(cv1)
+avg1=mean(cv1)
+error1 <- qnorm(0.975)*s1
+left1 <- avg1-error1
+right1 <- avg1+error1
+#alternative way
+#left1 <- qnorm(0.025,mean=avg1,sd=s1)
+#right1 <- qnorm(0.975,mean=avg1,sd=s1)
